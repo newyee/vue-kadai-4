@@ -38,9 +38,13 @@ export default {
           returnSecureToken: true
         }
       ).then(response => {
+        const userData = {
+          userName: this.userName,
+          email: this.email
+        }
+        this.$store.commit('saveUserData', userData)
         this.$router.push({
-          name: 'dashboard',
-          params: { userName: this.userName }
+          name: 'dashboard'
         })
       })
     }

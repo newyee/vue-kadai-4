@@ -5,12 +5,15 @@
 </template>
 <script>
 export default {
-  props: {
-    userName: {
-      type: String,
-      require: false,
-      default: null
+  data () {
+    return {
+      userName: '',
+      email: ''
     }
+  },
+  mounted () {
+    this.userName = this.$store.getters.userName
+    this.email = this.$store.getters.email
   }
 }
 </script>
