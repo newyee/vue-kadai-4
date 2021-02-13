@@ -6,11 +6,13 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userName: '',
-    email: ''
+    email: '',
+    returnSecureToken: true
   },
   getters: {
     userName: state => state.userName,
-    email: state => state.email
+    email: state => state.email,
+    returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
     saveUserData (state, userData) {

@@ -35,7 +35,7 @@ export default {
         {
           email: this.email,
           password: this.password,
-          returnSecureToken: true
+          returnSecureToken: this.$store.getters.returnSecureToken
         }
       ).then(response => {
         const userData = {
