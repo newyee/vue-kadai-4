@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p v-if="userName">ようこそ{{ userName }} さん</p>
+    <!-- <p>{{ this.$store.getters.userName }}さん</p> -->
+    <p>{{ userName }}さん</p>
   </div>
 </template>
 <script>

@@ -20,7 +20,6 @@
   </div>
 </template>
 <script>
-import axios from '../axios-auth'
 export default {
   data () {
     return {
@@ -31,21 +30,14 @@ export default {
   },
   methods: {
     register () {
-      axios.post('/accounts:signUp?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
-        {
-          email: this.email,
-          password: this.password,
-          returnSecureToken: this.$store.getters.returnSecureToken
-        }
-      ).then(response => {
-        const userData = {
-          userName: this.userName,
-          email: this.email
-        }
-        this.$store.commit('saveUserData', userData)
-        this.$router.push({
-          name: 'dashboard'
-        })
+      const userData = {
+        userName: this.userName,
+        email: this.email,
+        password: this.password
+      }
+      this.$store.dispatch('registerUserData', userData)
+      this.$router.push({
+        name: 'dashboard'
       })
     }
   }
