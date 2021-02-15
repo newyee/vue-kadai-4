@@ -29,13 +29,13 @@ export default {
     }
   },
   methods: {
-    register () {
+    async register () {
       const userData = {
         userName: this.userName,
         email: this.email,
         password: this.password
       }
-      this.$store.dispatch('registerUserData', userData)
+      await this.$store.dispatch('registerUserData', userData)
       this.$router.push({
         name: 'dashboard'
       })

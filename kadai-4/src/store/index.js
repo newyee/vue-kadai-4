@@ -21,19 +21,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    registerUserData (context, userData) {
-      axios.post('/accounts:signUp?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+    async registerUserData (context, userData) {
+      await axios.post('/accounts:signUp?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
         {
           email: userData.email,
           password: userData.email,
           returnSecureToken: true
         }
-      ).then(response => {
+      ).then(_ => {
         const payload = {
           userName: userData.userName,
           email: userData.email
         }
         context.commit('saveUserData', payload)
+      }).catch(error => {
+        console.log('error', error)
       })
     }
   },
