@@ -13,7 +13,6 @@ export default {
     }
   },
   mounted () {
-    console.log('test', this.$store.getters.userName)
     this.userName = this.$store.getters.userName
     this.email = this.$store.getters.email
   }
