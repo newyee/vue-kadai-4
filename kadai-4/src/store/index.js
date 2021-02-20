@@ -28,9 +28,9 @@ export default new Vuex.Store({
           password: userData.password,
           returnSecureToken: true
         }
-      ).then(response => {
+      ).then(async response => {
         // console.log('response', response)
-        axios.post('/accounts:update?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+        await axios.post('/accounts:update?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
           {
             idToken: response.data.idToken,
             displayName: userData.userName,
