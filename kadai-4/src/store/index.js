@@ -29,13 +29,31 @@ export default new Vuex.Store({
           returnSecureToken: true
         }
       ).then(async response => {
+        console.log(response)
         await axios.post('/accounts:update?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
           {
             idToken: response.data.idToken,
             displayName: userData.userName,
             returnSecureToken: true
           }
-        ).then(response => {
+        ).then(async response => {
+          const uid = response.data.localId
+          await axios.post('https://firestore.googleapis.com/v1/projects/vue-kadai-4-6e35a/databases/(default)/documents/cities/user-data',
+            {
+              fields: {
+                uid: {
+                  name: {
+                    stringValue: userData.userName
+                  },
+                  wallet: {
+                    integerValue: 500
+                  }
+                }
+              }
+            }
+          ).then(response => {
+            console.log('hogehoge', response)
+          })
           const payload = {
             userName: userData.userName,
             email: userData.email
