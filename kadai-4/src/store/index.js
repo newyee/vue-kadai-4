@@ -25,13 +25,40 @@ export default new Vuex.Store({
       await axios.post('/accounts:signUp?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
         {
           email: userData.email,
-          password: userData.email,
+          password: userData.password,
           returnSecureToken: true
         }
-      ).then(_ => {
+      ).then(async response => {
+        await axios.post('/accounts:update?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+          {
+            idToken: response.data.idToken,
+            displayName: userData.userName,
+            returnSecureToken: true
+          }
+        ).then(response => {
+          const payload = {
+            userName: userData.userName,
+            email: userData.email
+          }
+          context.commit('saveUserData', payload)
+        }).catch(error => {
+          console.log('error', error)
+        })
+      }).catch(error => {
+        console.log('error', error)
+      })
+    },
+    async login (context, userData) {
+      await axios.post('/accounts:signInWithPassword?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+        {
+          email: userData.email,
+          password: userData.password,
+          returnSecureToken: true
+        }
+      ).then(response => {
         const payload = {
-          userName: userData.userName,
-          email: userData.email
+          userName: response.data.displayName,
+          email: response.data.email
         }
         context.commit('saveUserData', payload)
       }).catch(error => {
