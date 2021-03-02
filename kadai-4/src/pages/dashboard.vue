@@ -12,7 +12,7 @@ export default {
       email: ''
     }
   },
-  mounted () {
+  created () {
     this.userName = this.$store.getters.userName
     this.email = this.$store.getters.email
   }
