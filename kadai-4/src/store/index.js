@@ -42,7 +42,7 @@ export default new Vuex.Store({
 
           const uid = response.data.localId
           const wallet = 500
-          await axios.post('https://firestore.googleapis.com/v1/projects/vue-kadai-4-6e35a/databases/(default)/documents/cities/user-data',
+          await axios.post('https://firestore.googleapis.com/v1/projects/vue-kadai-4-6e35a/databases/(default)/documents/user-data',
             {
               fields: {
                 wallet: {
@@ -70,7 +70,7 @@ export default new Vuex.Store({
       })
     },
     async login (context, userData) {
-      await axios.post('/accounts:signInWithPassword?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+      await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
         {
           email: userData.email,
           password: userData.password,
