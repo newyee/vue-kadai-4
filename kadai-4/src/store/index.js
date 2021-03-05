@@ -13,12 +13,12 @@ export default new Vuex.Store({
   getters: {
     userName: state => state.userName,
     email: state => state.email,
+    wallet: state => state.wallet,
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
     saveUserData (state, payload) {
       state.userName = payload.userName
-      state.email = payload.email
       state.wallet = payload.wallet
     }
   },
@@ -31,40 +31,32 @@ export default new Vuex.Store({
           returnSecureToken: true
         }
       ).then(async response => {
-        await axios.post('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
+        const uid = response.data.localId
+        const wallet = 500
+        // console.log(uid)
+        // console.log(wallet)
+        await axios.post('https://firestore.googleapis.com/v1/projects/vue-kadai-4-6e35a/databases/(default)/documents/user-data',
           {
-            idToken: response.data.idToken,
-            displayName: userData.userName,
-            returnSecureToken: true
-          }
-        ).then(async response => {
-          console.log('aaa', response)
-
-          const uid = response.data.localId
-          const wallet = 500
-          await axios.post('https://firestore.googleapis.com/v1/projects/vue-kadai-4-6e35a/databases/(default)/documents/user-data',
-            {
-              fields: {
-                wallet: {
-                  integerValue: wallet
-                },
-                userId: {
-                  stringValue: uid
-                }
+            fields: {
+              name: {
+                stringValue: userData.userName
+              },
+              wallet: {
+                integerValue: wallet
+              },
+              userId: {
+                stringValue: uid
               }
             }
-          ).then(response => {
-            console.log('hogehoge', response)
-          })
-          const payload = {
-            userName: userData.userName,
-            email: userData.email,
-            wallet: wallet
           }
-          context.commit('saveUserData', payload)
-        }).catch(error => {
-          console.log('error', error)
+        ).then(response => {
+          console.log('hogehoge', response)
         })
+        const payload = {
+          userName: userData.userName,
+          wallet: wallet
+        }
+        context.commit('saveUserData', payload)
       }).catch(error => {
         console.log('error', error)
       })
@@ -78,7 +70,7 @@ export default new Vuex.Store({
         }
       ).then(response => {
         const payload = {
-          userName: response.data.displayName,
+          userName: userData.user,
           email: response.data.email
         }
         context.commit('saveUserData', payload)
