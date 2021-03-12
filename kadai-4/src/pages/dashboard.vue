@@ -5,16 +5,16 @@
   </div>
 </template>
 <script>
-export default {
-  data () {
-    return {
-      userName: '',
-      email: ''
-    }
-  },
-  created () {
-    this.userName = this.$store.getters.userName
-    this.email = this.$store.getters.email
+  export default {
+    data() {
+      return {
+        userName: '',
+        email: '',
+      }
+    },
+    created() {
+      this.userName = this.$store.getters.userName
+      this.email = this.$store.getters.email
+    },
   }
-}
 </script>
