@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
 Vue.use(Vuex)
-
+/* eslint-disable */
 export default new Vuex.Store({
   state: {
     userName: '',
@@ -34,13 +34,12 @@ export default new Vuex.Store({
           const userName = userData.userName
           await db
             .collection('user-data')
-            .add({
-              uid: uid,
+            .doc(uid)
+            .set({
               userName: userName,
               wallet: wallet
             })
             .then(docRef => {
-              console.log('Document written with ID: ', docRef.id)
               const payload = {
                 userName: userData.userName,
                 wallet: wallet
@@ -59,10 +58,17 @@ export default new Vuex.Store({
       await firebase
         .auth()
         .signInWithEmailAndPassword(userData.email, userData.password)
-        .then(response => {
+        .then(async response => {
+          const db = firebase.firestore()
+          await db
+            .collection('user-data')
+            .get(response.user.uid)
+            .then(response => {
+              console.log('data', response)
+            })
           const payload = {
             userName: userData.user,
-            email: userData.email
+            wallet: wallet
           }
           context.commit('saveUserData', payload)
           console.log(response)
