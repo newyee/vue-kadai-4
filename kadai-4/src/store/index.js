@@ -59,19 +59,24 @@ export default new Vuex.Store({
         .auth()
         .signInWithEmailAndPassword(userData.email, userData.password)
         .then(async response => {
+          console.log(response)
           const db = firebase.firestore()
           await db
             .collection('user-data')
-            .get(response.user.uid)
+            .doc(response.user.uid)
+            .get()
             .then(response => {
               console.log('data', response)
             })
-          const payload = {
-            userName: userData.user,
-            wallet: wallet
-          }
-          context.commit('saveUserData', payload)
-          console.log(response)
+            .catch(error => {
+              console.log('エラー')
+            })
+          // const payload = {
+          //   userName: userData.user,
+          //   wallet: wallet
+          // }
+          // context.commit('saveUserData', payload)
+          // console.log(response)
         })
         .catch(error => {
           console.log(error)
