@@ -1,21 +1,32 @@
 <template>
   <div>
-    <!-- <p>{{ this.$store.getters.userName }}さん</p> -->
-    <p>{{ userName }}さん</p>
+    <p>ようこそ！{{ userName }}さん</p>
+    <p>残高: {{ wallet }}</p>
+    <p>{{ this.$store.getters.loggedIn }}</p>
   </div>
 </template>
 <script>
 /* eslint-disable */
   export default {
+    created(){
+      this.$store.dispatch('onAuth')
+      this.loggedIn = this.$store.getters.loggedIn
+      if (this.$store.getters.loggedIn == false){
+        this.$router.push({
+          name: 'login',
+        })
+      }
+    },
     data() {
       return {
         userName: '',
-        email: '',
+        wallet: '',
+        loggedIn:''
       }
     },
     created() {
       this.userName = this.$store.getters.userName
-      this.email = this.$store.getters.email
+      this.wallet = this.$store.getters.wallet
     },
   }
 </script>

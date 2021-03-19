@@ -17,6 +17,13 @@ const firebaseConfig = {
   measurementId: 'G-KG2MPX74TE'
 }
 firebase.initializeApp(firebaseConfig)
+firebase
+  .auth()
+  .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .then(() => {
+    console.log('Initialized!') // 確認用のメッセージ
+  })
+
 new Vue({
   router,
   store,

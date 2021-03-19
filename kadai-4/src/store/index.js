@@ -6,16 +6,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userName: '',
-    email: '',
-    wallet: ''
+    wallet: '',
+    userUid:'',
+    loggedIn: false,
   },
   getters: {
     userName: state => state.userName,
-    email: state => state.email,
     wallet: state => state.wallet,
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
+    loginStatusChange(state, status) { // 認証状態を双方向に変化
+      console.log('status', status)
+      state.loggedIn = status
+    },
+    setUserUid(state, userUid) { // user_uidの取得
+      state.userUid = userUid
+    },
     saveUserData(state, payload) {
       state.userName = payload.userName
       state.wallet = payload.wallet
@@ -65,44 +72,36 @@ export default new Vuex.Store({
             .collection('user-data')
             .doc(response.user.uid)
             .get()
-            .then(response => {
-              console.log('data', response)
+            .then(doc => {
+              console.log('data', doc.data())
+              const userName = doc.data().userName
+              const wallet = doc.data().wallet
+              const payload = {
+                userName: userName,
+                wallet: wallet
+              }
+              context.commit('saveUserData', payload)
             })
             .catch(error => {
               console.log('エラー')
             })
-          // const payload = {
-          //   userName: userData.user,
-          //   wallet: wallet
-          // }
-          // context.commit('saveUserData', payload)
-          // console.log(response)
         })
         .catch(error => {
           console.log(error)
           // var errorCode = error.code
           // var errorMessage = error.message
         })
-      // await axios
-      //   .post(
-      //     'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyD-8X_eLWbZ-XW0tanR2RnUHi0hOtQPSrk',
-      //     {
-      //       email: userData.email,
-      //       password: userData.password,
-      //       returnSecureToken: true
-      //     }
-      //   )
-      //   .then(response => {
-      //     const payload = {
-      //       userName: userData.user,
-      //       email: response.data.email
-      //     }
-      //     context.commit('saveUserData', payload)
-      //   })
-      //   .catch(error => {
-      //     console.log('error', error)
-      //   })
-    }
+    },
+    // 認証状態の取得をするaction
+    onAuth({ commit }) {
+      firebase.auth().onAuthStateChanged(user => {
+        user = user ? user : {}
+        commit('setUserUid', user.uid)
+        console.log('user.uid',user.uid)
+        commit('loginStatusChange', user.uid ? true : false)
+      })
+    },
   },
   modules: {}
+
 })
