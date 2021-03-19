@@ -9,6 +9,7 @@
 /* eslint-disable */
   export default {
     created(){
+      console.log('aaa')
       this.$store.dispatch('onAuth')
       this.loggedIn = this.$store.getters.loggedIn
       if (this.$store.getters.loggedIn == false){
