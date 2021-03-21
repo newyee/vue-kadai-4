@@ -17,6 +17,8 @@
           name: 'login',
         })
       }
+      this.userName = this.$store.getters.userName
+      this.wallet = this.$store.getters.wallet
     },
     data() {
       return {
@@ -24,10 +26,6 @@
         wallet: '',
         loggedIn:''
       }
-    },
-    created() {
-      this.userName = this.$store.getters.userName
-      this.wallet = this.$store.getters.wallet
     },
   }
 </script>

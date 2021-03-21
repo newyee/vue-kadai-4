@@ -83,7 +83,7 @@ export default new Vuex.Store({
               context.commit('saveUserData', payload)
             })
             .catch(error => {
-              console.log('エラー')
+              console.log('エラー',error)
             })
         })
         .catch(error => {
@@ -94,14 +94,37 @@ export default new Vuex.Store({
     },
     // 認証状態の取得をするaction
     onAuth({ commit }) {
-      firebase.auth().onAuthStateChanged(user => {
+      firebase.auth().onAuthStateChanged( async user => {
         user = user ? user : {}
         commit('setUserUid', user.uid)
         console.log('user.uid',user.uid)
-        commit('loginStatusChange', user.uid ? true : false)
+        let loginFlag = false
+        if (user.uid){
+          loginFlag = true
+          await db
+          .collection('user-data')
+          .doc(user.uid)
+          .get()
+          .then(doc => {
+            console.log('data', doc.data())
+            const userName = doc.data().userName
+            const wallet = doc.data().wallet
+            const payload = {
+              userName: userName,
+              wallet: wallet
+            }
+            context.commit('saveUserData', payload)
+          })
+          .catch(error => {
+            console.log('エラー',error)
+          })
+        }else{
+          loginFlag = false
+        }
+
+        commit('loginStatusChange', loginFlag)
+
       })
     },
-  },
   modules: {}
-
 })
