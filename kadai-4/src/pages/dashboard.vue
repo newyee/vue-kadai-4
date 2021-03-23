@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>ようこそ！{{ userName }}さん</p>
-    <p>残高: {{ wallet }}</p>
+    <p v-cloak>ようこそ！{{ userName }}さん</p>
+    <p v-cloak>残高: {{ wallet }}</p>
     <p>{{ this.$store.getters.loggedIn }}</p>
   </div>
 </template>
