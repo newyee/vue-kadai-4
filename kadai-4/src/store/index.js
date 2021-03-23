@@ -110,6 +110,8 @@ export default new Vuex.Store({
             console.log('data', doc.data())
             const userName = doc.data().userName
             const wallet = doc.data().wallet
+            console.log(userName)
+            console.log(wallet)
             const payload = {
               userName: userName,
               wallet: wallet
