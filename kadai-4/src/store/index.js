@@ -99,6 +99,7 @@ export default new Vuex.Store({
         commit('setUserUid', user.uid)
         console.log('user.uid',user.uid)
         let loginFlag = false
+        const db = firebase.firestore()
         if (user.uid){
           loginFlag = true
           await db
@@ -113,7 +114,7 @@ export default new Vuex.Store({
               userName: userName,
               wallet: wallet
             }
-            context.commit('saveUserData', payload)
+            commit('saveUserData', payload)
           })
           .catch(error => {
             console.log('エラー',error)
@@ -121,10 +122,10 @@ export default new Vuex.Store({
         }else{
           loginFlag = false
         }
-
         commit('loginStatusChange', loginFlag)
-
       })
     },
+  },
   modules: {}
+
 })

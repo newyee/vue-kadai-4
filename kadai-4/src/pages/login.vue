@@ -2,11 +2,11 @@
   <div>
     <h1>ログイン</h1>
     <p>
-      <label for="mail">メールアドレス:</label>
+      <label for="mail" v-cloak>メールアドレス:</label>
       <input type="text" id="mail" v-model="email" />
     </p>
     <p>
-      <label for="password">パスワード</label>
+      <label for="password" v-cloak>パスワード</label>
       <input type="text" id="password" v-model="password" />
     </p>
     <div>
