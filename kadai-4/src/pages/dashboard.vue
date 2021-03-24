@@ -26,7 +26,6 @@
         this.userName = this.$store.getters.userName
         this.wallet = this.$store.getters.wallet
         console.log('ok',this.$store.getters.wallet)
-
       }
       console.log('ng',this.$store.getters.wallet)
     },
