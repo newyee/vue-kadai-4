@@ -9,16 +9,26 @@
 /* eslint-disable */
   export default {
     created(){
-      console.log('aaa')
+
+    },
+    mounted() {
+      console.log('1')
       this.$store.dispatch('onAuth')
+      console.log('2')
       this.loggedIn = this.$store.getters.loggedIn
+      console.log('3')
       if (this.$store.getters.loggedIn == false){
         this.$router.push({
           name: 'login',
         })
       }
-      this.userName = this.$store.getters.userName
-      this.wallet = this.$store.getters.wallet
+      if(this.loggedIn){
+        this.userName = this.$store.getters.userName
+        this.wallet = this.$store.getters.wallet
+        console.log('ok',this.$store.getters.wallet)
+
+      }
+      console.log('ng',this.$store.getters.wallet)
     },
     data() {
       return {
