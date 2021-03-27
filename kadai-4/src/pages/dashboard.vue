@@ -19,12 +19,12 @@
           name: 'login',
         })
       }
-    //   if(this.loggedIn){
-    //     this.userName = this.$store.getters.userName
-    //     this.wallet = this.$store.getters.wallet
-    //     console.log('ok',this.$store.getters.wallet)
-    //   }
-    //   console.log('ng',this.$store.getters.wallet)
+      if(this.loggedIn){
+        this.userName = this.$store.getters.userName
+        this.wallet = this.$store.getters.wallet
+        console.log('ok',this.$store.getters.wallet)
+      }
+      console.log('ng',this.$store.getters.wallet)
     },
     mounted() {
     },
