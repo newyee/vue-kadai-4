@@ -66,14 +66,12 @@ export default new Vuex.Store({
         .auth()
         .signInWithEmailAndPassword(userData.email, userData.password)
         .then(async response => {
-          console.log(response)
           const db = firebase.firestore()
           await db
             .collection('user-data')
             .doc(response.user.uid)
             .get()
             .then(doc => {
-              console.log('data', doc.data())
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {
@@ -97,7 +95,6 @@ export default new Vuex.Store({
       firebase.auth().onAuthStateChanged( async user => {
         user = user ? user : {}
         commit('setUserUid', user.uid)
-        console.log('user.uid',user.uid)
         let loginFlag = false
         const db = firebase.firestore()
         if (user.uid){
@@ -107,11 +104,8 @@ export default new Vuex.Store({
           .doc(user.uid)
           .get()
           .then(doc => {
-            console.log('data', doc.data())
             const userName = doc.data().userName
             const wallet = doc.data().wallet
-            console.log(userName)
-            console.log(wallet)
             const payload = {
               userName: userName,
               wallet: wallet

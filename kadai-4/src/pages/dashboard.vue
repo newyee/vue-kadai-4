@@ -1,38 +1,30 @@
 <template>
   <div>
-    <p>ようこそ！{{ userName() }}さん</p>
-    <p>残高: {{ wallet() }}</p>
-    <p>{{ this.$store.getters.loggedIn }}</p>
+    <div class="main-content">
+      <div class="header-content">
+        <p v-if="userName">ようこそ！{{ userName }}さん</p>
+        <p v-if="wallet">残高: {{ wallet }}</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
   export default {
     created(){
-      console.log('1')
       this.$store.dispatch('onAuth')
-      console.log('2')
       this.loggedIn = this.$store.getters.loggedIn
-      console.log('3')
       if (this.$store.getters.loggedIn == false){
         this.$router.push({
           name: 'login',
         })
       }
-      if(this.loggedIn){
-        this.userName = this.$store.getters.userName
-        this.wallet = this.$store.getters.wallet
-        console.log('ok',this.$store.getters.wallet)
-      }
-      console.log('ng',this.$store.getters.wallet)
     },
     mounted() {
     },
     data() {
       return {
-        userName: '',
-        wallet: '',
-        loggedIn:''
+
       }
     },
     computed: {
@@ -42,7 +34,19 @@
       wallet() {
         return this.$store.getters.wallet
       }
-  },
+    },
 
   }
 </script>
+<style lang="scss">
+.main-content{
+  width:1000px;
+  margin: 0 auto;
+  .header-content{
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+</style>>
+
+
