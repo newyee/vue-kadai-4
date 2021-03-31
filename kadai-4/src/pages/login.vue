@@ -2,12 +2,12 @@
   <div>
     <h1>ログイン</h1>
     <p>
-      <label for="mail">メールアドレス:</label>
-      <input type="text" id="mail" v-model="email">
+      <label for="mail" v-cloak>メールアドレス:</label>
+      <input type="text" id="mail" v-model="email" />
     </p>
     <p>
-      <label for="password">パスワード</label>
-      <input type="text" id="password" v-model="password">
+      <label for="password" v-cloak>パスワード</label>
+      <input type="text" id="password" v-model="password" />
     </p>
     <div>
       <button @click="login">ログイン</button>
@@ -16,7 +16,16 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
+  created() {
+    this.$store.dispatch('onAuth')
+    if (this.$store.getters.loggedIn == false){
+      this.$router.push({
+        name: 'dashboard',
+      })
+    }
+  },
   data () {
     return {
       userName: '',
