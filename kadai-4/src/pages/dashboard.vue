@@ -35,8 +35,8 @@
     methods: {
       logout(){
         this.$store.dispatch('logout')
-        console.log('aaaaa',this.loggedIn)
         let loggedIn = this.$store.getters.loggedIn
+        console.log('aaaaa',loggedIn)
         if(loggedIn === false){
           this.$router.push({
             name:'login'
