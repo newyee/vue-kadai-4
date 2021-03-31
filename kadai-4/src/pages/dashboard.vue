@@ -4,6 +4,7 @@
       <div class="header-content">
         <p v-if="userName">ようこそ！{{ userName }}さん</p>
         <p v-if="wallet">残高: {{ wallet }}</p>
+        <button @click="logout">ログアウト</button>
       </div>
     </div>
   </div>
@@ -13,8 +14,8 @@
   export default {
     created(){
       this.$store.dispatch('onAuth')
-      this.loggedIn = this.$store.getters.loggedIn
-      if (this.$store.getters.loggedIn === false){
+      let loggedIn = this.$store.getters.loggedIn
+      if (loggedIn === false){
         this.$router.push({
           name: 'login',
         })
@@ -26,6 +27,22 @@
       },
       wallet() {
         return this.$store.getters.wallet
+      },
+      // loggedIn(){
+      //   return this.$store.getters.loggedIn
+      // }
+    },
+    methods: {
+      logout(){
+        this.$store.dispatch('logout')
+        console.log('aaaaa',this.loggedIn)
+        let loggedIn = this.$store.getters.loggedIn
+        if(loggedIn === false){
+          this.$router.push({
+            name:'login'
+          })
+        }
+
       }
     },
 

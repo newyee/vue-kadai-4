@@ -26,6 +26,11 @@ export default new Vuex.Store({
     saveUserData(state, payload) {
       state.userName = payload.userName
       state.wallet = payload.wallet
+    },
+    deleteUserData(state){
+      state.userName = ''
+      state.wallet = ''
+      state.loggedIn = false
     }
   },
   actions: {
@@ -90,9 +95,19 @@ export default new Vuex.Store({
           // var errorMessage = error.message
         })
     },
+    async logout({ commit }){
+      await firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+        commit('deleteUserData')
+
+      }).catch((error) => {
+        // An error happened.
+        console.log(error)
+      })
+    },
     // 認証状態の取得をするaction
-    onAuth({ commit }) {
-      firebase.auth().onAuthStateChanged( async user => {
+    async onAuth({ commit }) {
+      await firebase.auth().onAuthStateChanged( async user => {
         user = user ? user : {}
         commit('setUserUid', user.uid)
         let loginFlag = false
