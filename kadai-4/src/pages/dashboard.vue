@@ -14,17 +14,10 @@
     created(){
       this.$store.dispatch('onAuth')
       this.loggedIn = this.$store.getters.loggedIn
-      if (this.$store.getters.loggedIn == false){
+      if (this.$store.getters.loggedIn === false){
         this.$router.push({
           name: 'login',
         })
-      }
-    },
-    mounted() {
-    },
-    data() {
-      return {
-
       }
     },
     computed: {
