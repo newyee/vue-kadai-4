@@ -13,11 +13,11 @@ export default new Vuex.Store({
   getters: {
     userName: state => state.userName,
     wallet: state => state.wallet,
+    loggedIn: state => state.loggedIn,
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
     loginStatusChange(state, status) { // 認証状態を双方向に変化
-      console.log('status', status)
       state.loggedIn = status
     },
     setUserUid(state, userUid) { // user_uidの取得
@@ -106,8 +106,8 @@ export default new Vuex.Store({
       })
     },
     // 認証状態の取得をするaction
-    async onAuth({ commit }) {
-      await firebase.auth().onAuthStateChanged( async user => {
+    onAuth({ commit }) {
+      firebase.auth().onAuthStateChanged( async user => {
         user = user ? user : {}
         commit('setUserUid', user.uid)
         let loginFlag = false

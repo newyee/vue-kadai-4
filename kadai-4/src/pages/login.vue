@@ -18,9 +18,9 @@
 <script>
 /* eslint-disable */
 export default {
-  created() {
-    this.$store.dispatch('onAuth')
-    if (this.$store.getters.loggedIn == false){
+  async created() {
+    await this.$store.dispatch('onAuth')
+    if (this.$store.getters.loggedIn == true){
       this.$router.push({
         name: 'dashboard',
       })

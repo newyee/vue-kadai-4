@@ -12,8 +12,8 @@
 <script>
 /* eslint-disable */
   export default {
-    created(){
-      this.$store.dispatch('onAuth')
+    async created(){
+      await this.$store.dispatch('onAuth')
       let loggedIn = this.$store.getters.loggedIn
       if (loggedIn === false){
         this.$router.push({
@@ -33,10 +33,9 @@
       // }
     },
     methods: {
-      logout(){
-        this.$store.dispatch('logout')
+      async logout(){
+        await this.$store.dispatch('logout')
         let loggedIn = this.$store.getters.loggedIn
-        console.log('aaaaa',loggedIn)
         if(loggedIn === false){
           this.$router.push({
             name:'login'
