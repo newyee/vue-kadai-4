@@ -26,6 +26,9 @@ export default new Vuex.Store({
     saveUserData(state, payload) {
       state.userName = payload.userName
       state.wallet = payload.wallet
+      console.log(payload)
+      state.loggedIn = payload.loggedIn
+
     },
     deleteUserData(state){
       state.userName = ''
@@ -54,7 +57,8 @@ export default new Vuex.Store({
             .then(docRef => {
               const payload = {
                 userName: userData.userName,
-                wallet: wallet
+                wallet: wallet,
+                loggedIn:true
               }
               context.commit('saveUserData', payload)
             })
@@ -81,9 +85,11 @@ export default new Vuex.Store({
               const wallet = doc.data().wallet
               const payload = {
                 userName: userName,
-                wallet: wallet
+                wallet: wallet,
+                loggedIn:true
               }
               context.commit('saveUserData', payload)
+
             })
             .catch(error => {
               console.log('エラー',error)
@@ -106,13 +112,16 @@ export default new Vuex.Store({
       })
     },
     // 認証状態の取得をするaction
-    onAuth({ commit }) {
-      firebase.auth().onAuthStateChanged( async user => {
+    async onAuth({ commit }) {
+      await firebase.auth().onAuthStateChanged( async user => {
+        console.log('ログイン状態の取得')
         user = user ? user : {}
-        commit('setUserUid', user.uid)
         let loginFlag = false
         const db = firebase.firestore()
+        console.log('データベース情報取得')
         if (user.uid){
+          commit('setUserUid', user.uid)
+          console.log('ユーザーIDの保存')
           loginFlag = true
           await db
           .collection('user-data')
@@ -123,9 +132,11 @@ export default new Vuex.Store({
             const wallet = doc.data().wallet
             const payload = {
               userName: userName,
-              wallet: wallet
+              wallet: wallet,
+              loggedIn:true
             }
             commit('saveUserData', payload)
+            console.log('ユーザー情報保存')
           })
           .catch(error => {
             console.log('エラー',error)
@@ -134,6 +145,7 @@ export default new Vuex.Store({
           loginFlag = false
         }
         commit('loginStatusChange', loginFlag)
+        console.log('ログインフラグ保存')
       })
     },
   },

@@ -20,7 +20,7 @@
 export default {
   async created() {
     await this.$store.dispatch('onAuth')
-    if (this.$store.getters.loggedIn == true){
+    if (this.$store.getters.loggedIn === true){
       this.$router.push({
         name: 'dashboard',
       })

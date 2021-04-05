@@ -13,9 +13,12 @@
 /* eslint-disable */
   export default {
     async created(){
+      console.log('onAuth呼び出し')
       await this.$store.dispatch('onAuth')
+      console.log('onAuthの処理終了')
       let loggedIn = this.$store.getters.loggedIn
       if (loggedIn === false){
+        console.log('ログイン画面へ遷移')
         this.$router.push({
           name: 'login',
         })
