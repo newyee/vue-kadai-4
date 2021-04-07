@@ -18,8 +18,10 @@
 <script>
 /* eslint-disable */
 export default {
-  async created() {
-    await this.$store.dispatch('onAuth')
+  created() {
+    console.log('1')
+    this.$store.dispatch('onAuth')
+    console.log('2')
     if (this.$store.getters.loggedIn === true){
       this.$router.push({
         name: 'dashboard',
@@ -34,12 +36,12 @@ export default {
     }
   },
   methods: {
-    async login () {
+    login () {
       const userData = {
         email: this.email,
         password: this.password
       }
-      await this.$store.dispatch('login', userData)
+      this.$store.dispatch('login', userData)
       this.$router.push({
         name: 'dashboard'
       })
