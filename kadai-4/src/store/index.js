@@ -148,7 +148,9 @@ export default new Vuex.Store({
             }
             commit('loginStatusChange', loginFlag)
             console.log('ログインフラグ保存')
+            resolve()
           })
+
         });
       }
       await authUser()
