@@ -111,53 +111,6 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    // 認証状態の取得をするaction
-    async onAuth({ commit }) {
-      function authUser() {
-        return new Promise((resolve, reject) => {
-          try {
-            firebase.auth().onAuthStateChanged( async user => {
-              console.log('ログイン状態の取得')
-              user = user ? user : {}
-              let loginFlag = false
-              const db = firebase.firestore()
-              console.log('データベース情報取得')
-              if (user.uid){
-                commit('setUserUid', user.uid)
-                console.log('ユーザーIDの保存')
-                loginFlag = true
-                await db
-                .collection('user-data')
-                .doc(user.uid)
-                .get()
-                .then(doc => {
-                  const userName = doc.data().userName
-                  const wallet = doc.data().wallet
-                  const payload = {
-                    userName: userName,
-                    wallet: wallet,
-                    loggedIn:true
-                  }
-                  commit('saveUserData', payload)
-                  console.log('ユーザー情報保存')
-                })
-                .catch(error => {
-                  console.log('エラー',error)
-                })
-              }else{
-                loginFlag = false
-              }
-              commit('loginStatusChange', loginFlag)
-              console.log('ログインフラグ保存')
-              resolve()
-            })
-          } catch (error) {
-            reject()
-          }
-        });
-      }
-      await authUser()
-    },
   },
   modules: {}
 

@@ -19,9 +19,6 @@
 /* eslint-disable */
 export default {
   created() {
-    console.log('1')
-    this.$store.dispatch('onAuth')
-    console.log('2')
     if (this.$store.getters.loggedIn === true){
       this.$router.push({
         name: 'dashboard',
