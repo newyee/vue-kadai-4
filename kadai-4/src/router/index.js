@@ -23,8 +23,8 @@ const routes = [
             next({
               path: '/register',
             })
-            console.log('user',user)
-            console.log(next)
+            // console.log('user',user)
+            // console.log(next)
           } else {
             next()
           }
