@@ -21,7 +21,7 @@ const routes = [
         firebase.auth().onAuthStateChanged(function (user) {
           if (user) {
             next({
-              path: '/register',
+              path: '/dashboard',
             })
             // console.log('user',user)
             // console.log(next)
