@@ -28,7 +28,7 @@ const routes = [
               const db = firebase.firestore()
               console.log('データベース情報取得')
               if (user.uid){
-                commit('setUserUid', user.uid)
+                store.commit('setUserUid', user.uid)
                 console.log('ユーザーIDの保存')
                 loginFlag = true
                 db
@@ -43,7 +43,7 @@ const routes = [
                     wallet: wallet,
                     loggedIn:true
                   }
-                  commit('saveUserData', payload)
+                  store.commit('saveUserData', payload)
                   console.log('ユーザー情報保存')
                 })
                 .catch(error => {

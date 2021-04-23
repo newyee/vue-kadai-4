@@ -111,6 +111,11 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    // 認証状態の取得をするaction
+    async onAuth({ commit }) {
+
+      await authUser()
+    },
   },
   modules: {}
 
