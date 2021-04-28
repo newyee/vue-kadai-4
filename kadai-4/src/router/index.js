@@ -42,17 +42,15 @@ router.beforeEach((to, from, next) => {
     // もしされていないならば、ログインページにリダイレクトします。
     try {
       firebase.auth().onAuthStateChanged(function (user) {
-        // console.log(user)
+        console.log(user)
         if (user) {
           next({
-            path:'/dashboard',
             params: { user: user }
           })
           // next()
           // console.log('user',user)
           // console.log(next)
         } else {
-
           next({
             path: '/login',
           })

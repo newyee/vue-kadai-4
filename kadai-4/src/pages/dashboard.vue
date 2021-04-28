@@ -54,7 +54,7 @@
       //   } catch (error) {
       //     console.log(error)
       //   }
-      console.log('test',this.$router.params)
+      console.log('test',this.$route.params)
     },
     computed: {
       userName() {
