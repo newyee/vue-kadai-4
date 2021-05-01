@@ -26,9 +26,6 @@ export default new Vuex.Store({
     saveUserData(state, payload) {
       state.userName = payload.userName
       state.wallet = payload.wallet
-      console.log(payload)
-      state.loggedIn = payload.loggedIn
-
     },
     deleteUserData(state){
       state.userName = ''
@@ -42,7 +39,6 @@ export default new Vuex.Store({
         .auth()
         .createUserWithEmailAndPassword(userData.email, userData.password)
         .then(async response => {
-          console.log(response)
           const db = firebase.firestore()
           const uid = response.user.uid
           const wallet = 500
@@ -58,7 +54,6 @@ export default new Vuex.Store({
               const payload = {
                 userName: userData.userName,
                 wallet: wallet,
-                loggedIn:true
               }
               context.commit('saveUserData', payload)
             })
@@ -97,8 +92,6 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log(error)
-          // var errorCode = error.code
-          // var errorMessage = error.message
         })
     },
     async logout({ commit }){
@@ -111,12 +104,6 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
-    // 認証状態の取得をするaction
-    async onAuth({ commit }) {
-
-      await authUser()
-    },
   },
   modules: {}
-
 })
