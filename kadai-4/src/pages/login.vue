@@ -33,12 +33,12 @@ export default {
     }
   },
   methods: {
-    login () {
+    async login () {
       const userData = {
         email: this.email,
         password: this.password
       }
-      this.$store.dispatch('login', userData)
+      await this.$store.dispatch('login', userData)
       this.$router.push({
         name: 'dashboard'
       })

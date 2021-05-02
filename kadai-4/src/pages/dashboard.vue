@@ -70,11 +70,11 @@ import store from '../store/index'
         await this.$store.dispatch('logout')
         console.log('ログアウト')
         let loggedIn = this.$store.getters.loggedIn
-        if(loggedIn === false){
-          this.$router.push({
-            name:'login'
-          })
-        }
+        // if(loggedIn === false){
+        //   this.$router.push({
+        //     name:'login'
+        //   })
+        // }
       }
     },
   }
