@@ -38,7 +38,9 @@ export default {
         email: this.email,
         password: this.password
       }
+      console.log('1')
       await this.$store.dispatch('login', userData)
+      console.log('2')
       this.$router.push({
         name: 'dashboard'
       })
