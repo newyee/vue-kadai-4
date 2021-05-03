@@ -39,6 +39,7 @@ router.beforeEach((to, from, next) => {
     // このルートはログインされているかどうか認証が必要です。
     // もしされていないならば、ログインページにリダイレクトします。
     firebase.auth().onAuthStateChanged(function (user) {
+      console.log('呼び出し')
       if (user) {
         next()
         // next()
