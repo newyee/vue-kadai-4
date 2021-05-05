@@ -52,7 +52,6 @@ import store from '../store/index'
     methods: {
       async logout(){
         await this.$store.dispatch('logout')
-        let loggedIn = this.$store.getters.loggedIn
       }
     },
   }

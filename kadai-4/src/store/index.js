@@ -8,18 +8,13 @@ export default new Vuex.Store({
     userName: '',
     wallet: '',
     userUid:'',
-    loggedIn: false,
   },
   getters: {
     userName: state => state.userName,
     wallet: state => state.wallet,
-    loggedIn: state => state.loggedIn,
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
-    loginStatusChange(state, status) { // 認証状態を双方向に変化
-      state.loggedIn = status
-    },
     setUserUid(state, userUid) { // user_uidの取得
       state.userUid = userUid
     },
@@ -30,7 +25,6 @@ export default new Vuex.Store({
     deleteUserData(state){
       state.userName = ''
       state.wallet = ''
-      state.loggedIn = false
     }
   },
   actions: {
@@ -81,7 +75,6 @@ export default new Vuex.Store({
               const payload = {
                 userName: userName,
                 wallet: wallet,
-                loggedIn:true
               }
               context.commit('saveUserData', payload)
 
@@ -100,7 +93,7 @@ export default new Vuex.Store({
         commit('deleteUserData')
       }).catch((error) => {
         // An error happened.
-        console.log(error)
+        console.log('エラー', error)
       })
     },
   },

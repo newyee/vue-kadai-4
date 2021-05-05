@@ -22,8 +22,6 @@
 <script>
 /* eslint-disable */
   export default {
-    created() {
-    },
     data() {
       return {
         userName: '',
