@@ -5,7 +5,6 @@ import register from '../pages/register'
 import login from '../pages/login'
 import dashboard from '../pages/dashboard'
 import firebase from 'firebase'
-// import store from '../store/index'
 
 Vue.use(VueRouter)
 
@@ -39,10 +38,8 @@ router.beforeEach((to, from, next) => {
     // このルートはログインされているかどうか認証が必要です。
     // もしされていないならば、ログインページにリダイレクトします。
     firebase.auth().onAuthStateChanged(function (user) {
-      console.log('呼び出し')
       if (user) {
         next()
-        // next()
       } else {
         next({
           path: '/login',

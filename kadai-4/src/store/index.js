@@ -96,11 +96,8 @@ export default new Vuex.Store({
     },
     async logout({ commit }){
       await firebase.auth().signOut().then(() => {
-        console.log('111')
       // Sign-out successful.
         commit('deleteUserData')
-        console.log('222')
-
       }).catch((error) => {
         // An error happened.
         console.log(error)

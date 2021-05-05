@@ -23,11 +23,6 @@
 /* eslint-disable */
   export default {
     created() {
-      if (this.$store.getters.loggedIn){
-        this.$router.push({
-          name: 'dashboard',
-        })
-      }
     },
     data() {
       return {

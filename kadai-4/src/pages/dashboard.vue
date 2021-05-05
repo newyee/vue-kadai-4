@@ -15,15 +15,12 @@ import firebase from 'firebase'
 import store from '../store/index'
   export default {
     async created(){
-      firebase.auth().onAuthStateChanged(function (user) {
+      firebase.auth().onAuthStateChanged( (user) => {
         if (user) {
-          console.log('ログイン状態の取得')
           user = user ? user : {}
           const db = firebase.firestore()
-          console.log('データベース情報取得')
           if (user.uid){
             store.commit('setUserUid', user.uid)
-            console.log('ユーザーIDの保存')
             db
             .collection('user-data')
             .doc(user.uid)
@@ -36,20 +33,11 @@ import store from '../store/index'
                 wallet: wallet,
               }
               store.commit('saveUserData', payload)
-              console.log('ユーザー情報保存')
             })
             .catch(error => {
               console.log('エラー',error)
             })
-          }else{
-            this.$router.push({
-              name:'login'
-            })
           }
-        } else {
-          this.$router.push({
-            name:'login'
-          })
         }
       })
     },
@@ -60,21 +48,11 @@ import store from '../store/index'
       wallet() {
         return this.$store.getters.wallet
       },
-      // loggedIn(){
-      //   return this.$store.getters.loggedIn
-      // }
     },
     methods: {
       async logout(){
-        console.log('ログアウト実装')
         await this.$store.dispatch('logout')
-        console.log('ログアウト')
         let loggedIn = this.$store.getters.loggedIn
-        // if(loggedIn === false){
-        //   this.$router.push({
-        //     name:'login'
-        //   })
-        // }
       }
     },
   }
