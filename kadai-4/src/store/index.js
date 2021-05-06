@@ -41,13 +41,13 @@ export default new Vuex.Store({
             .collection('user-data')
             .doc(uid)
             .set({
-              userName: userName,
-              wallet: wallet
+              userName,
+              wallet
             })
             .then(docRef => {
               const payload = {
                 userName: userData.userName,
-                wallet: wallet,
+                wallet
               }
               context.commit('saveUserData', payload)
             })
@@ -73,8 +73,8 @@ export default new Vuex.Store({
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {
-                userName: userName,
-                wallet: wallet,
+                userName,
+                wallet,
               }
               context.commit('saveUserData', payload)
 

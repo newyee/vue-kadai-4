@@ -29,8 +29,8 @@ import store from '../store/index'
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {
-                userName: userName,
-                wallet: wallet,
+                userName,
+                wallet,
               }
               store.commit('saveUserData', payload)
             })
