@@ -4,21 +4,42 @@
       <div class="header-content">
         <p v-if="userName">ようこそ！{{ userName }}さん</p>
         <p v-if="wallet">残高: {{ wallet }}</p>
+        <button @click="logout">ログアウト</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
+import firebase from 'firebase'
+import store from '../store/index'
   export default {
-    created(){
-      this.$store.dispatch('onAuth')
-      this.loggedIn = this.$store.getters.loggedIn
-      if (this.$store.getters.loggedIn === false){
-        this.$router.push({
-          name: 'login',
-        })
-      }
+    async created(){
+      firebase.auth().onAuthStateChanged( (user) => {
+        if (user) {
+          user = user ? user : {}
+          const db = firebase.firestore()
+          if (user.uid){
+            store.commit('setUserUid', user.uid)
+            db
+            .collection('user-data')
+            .doc(user.uid)
+            .get()
+            .then(doc => {
+              const userName = doc.data().userName
+              const wallet = doc.data().wallet
+              const payload = {
+                userName,
+                wallet,
+              }
+              store.commit('saveUserData', payload)
+            })
+            .catch(error => {
+              console.log('エラー',error)
+            })
+          }
+        }
+      })
     },
     computed: {
       userName() {
@@ -26,9 +47,13 @@
       },
       wallet() {
         return this.$store.getters.wallet
+      },
+    },
+    methods: {
+      async logout(){
+        await this.$store.dispatch('logout')
       }
     },
-
   }
 </script>
 <style lang="scss">

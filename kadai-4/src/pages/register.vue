@@ -22,14 +22,6 @@
 <script>
 /* eslint-disable */
   export default {
-    created() {
-      this.$store.dispatch('onAuth')
-      if (this.$store.getters.loggedIn){
-        this.$router.push({
-          name: 'dashboard',
-        })
-      }
-    },
     data() {
       return {
         userName: '',

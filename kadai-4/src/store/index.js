@@ -8,7 +8,6 @@ export default new Vuex.Store({
     userName: '',
     wallet: '',
     userUid:'',
-    loggedIn: false,
   },
   getters: {
     userName: state => state.userName,
@@ -16,16 +15,16 @@ export default new Vuex.Store({
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
-    loginStatusChange(state, status) { // 認証状態を双方向に変化
-      console.log('status', status)
-      state.loggedIn = status
-    },
     setUserUid(state, userUid) { // user_uidの取得
       state.userUid = userUid
     },
     saveUserData(state, payload) {
       state.userName = payload.userName
       state.wallet = payload.wallet
+    },
+    deleteUserData(state){
+      state.userName = ''
+      state.wallet = ''
     }
   },
   actions: {
@@ -34,7 +33,6 @@ export default new Vuex.Store({
         .auth()
         .createUserWithEmailAndPassword(userData.email, userData.password)
         .then(async response => {
-          console.log(response)
           const db = firebase.firestore()
           const uid = response.user.uid
           const wallet = 500
@@ -43,13 +41,13 @@ export default new Vuex.Store({
             .collection('user-data')
             .doc(uid)
             .set({
-              userName: userName,
-              wallet: wallet
+              userName,
+              wallet
             })
             .then(docRef => {
               const payload = {
                 userName: userData.userName,
-                wallet: wallet
+                wallet
               }
               context.commit('saveUserData', payload)
             })
@@ -75,10 +73,11 @@ export default new Vuex.Store({
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {
-                userName: userName,
-                wallet: wallet
+                userName,
+                wallet,
               }
               context.commit('saveUserData', payload)
+
             })
             .catch(error => {
               console.log('エラー',error)
@@ -86,42 +85,17 @@ export default new Vuex.Store({
         })
         .catch(error => {
           console.log(error)
-          // var errorCode = error.code
-          // var errorMessage = error.message
         })
     },
-    // 認証状態の取得をするaction
-    onAuth({ commit }) {
-      firebase.auth().onAuthStateChanged( async user => {
-        user = user ? user : {}
-        commit('setUserUid', user.uid)
-        let loginFlag = false
-        const db = firebase.firestore()
-        if (user.uid){
-          loginFlag = true
-          await db
-          .collection('user-data')
-          .doc(user.uid)
-          .get()
-          .then(doc => {
-            const userName = doc.data().userName
-            const wallet = doc.data().wallet
-            const payload = {
-              userName: userName,
-              wallet: wallet
-            }
-            commit('saveUserData', payload)
-          })
-          .catch(error => {
-            console.log('エラー',error)
-          })
-        }else{
-          loginFlag = false
-        }
-        commit('loginStatusChange', loginFlag)
+    async logout({ commit }){
+      await firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+        commit('deleteUserData')
+      }).catch((error) => {
+        // An error happened.
+        console.log('エラー', error)
       })
     },
   },
   modules: {}
-
 })
