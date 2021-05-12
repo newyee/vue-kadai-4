@@ -6,6 +6,23 @@
         <p v-if="wallet">残高: {{ wallet }}</p>
         <button @click="logout">ログアウト</button>
       </div>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>
+                ユーザー名
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>test</td>
+              <td>test2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -23,16 +40,16 @@ import store from '../store/index'
             store.commit('setUserUid', user.uid)
             db
             .collection('user-data')
-            .doc(user.uid)
             .get()
             .then(doc => {
-              const userName = doc.data().userName
-              const wallet = doc.data().wallet
-              const payload = {
-                userName,
-                wallet,
-              }
-              store.commit('saveUserData', payload)
+              console.log('doc',doc)
+              // const userName = doc.data().userName
+              // const wallet = doc.data().wallet
+              // const payload = {
+              //   userName,
+              //   wallet,
+              // }
+              // store.commit('saveUserData', payload)
             })
             .catch(error => {
               console.log('エラー',error)
