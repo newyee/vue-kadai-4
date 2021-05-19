@@ -40,16 +40,16 @@ import store from '../store/index'
             store.commit('setUserUid', user.uid)
             db
             .collection('user-data')
+            .doc(user.uid)
             .get()
             .then(doc => {
-              console.log('doc',doc)
-              // const userName = doc.data().userName
-              // const wallet = doc.data().wallet
-              // const payload = {
-              //   userName,
-              //   wallet,
-              // }
-              // store.commit('saveUserData', payload)
+              const userName = doc.data().userName
+              const wallet = doc.data().wallet
+              const payload = {
+                userName,
+                wallet,
+              }
+              store.commit('saveUserData', payload)
             })
             .catch(error => {
               console.log('エラー',error)
