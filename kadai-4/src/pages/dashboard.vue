@@ -50,6 +50,9 @@ import store from '../store/index'
                 wallet,
               }
               store.commit('saveUserData', payload)
+              db.collection('user-data').where('user-data', '!=',user.uid).get().then(response => {
+                console.log('response',response)
+              })
             })
             .catch(error => {
               console.log('エラー',error)
