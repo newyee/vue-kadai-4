@@ -35,6 +35,7 @@ import store from '../store/index'
       firebase.auth().onAuthStateChanged( (user) => {
         if (user) {
           user = user ? user : {}
+          console.log('user',user.email)
           const db = firebase.firestore()
           if (user.uid){
             store.commit('setUserUid', user.uid)
@@ -50,7 +51,7 @@ import store from '../store/index'
                 wallet,
               }
               store.commit('saveUserData', payload)
-              db.collection('user-data').where('user-data', '!=',user.uid).get().then(response => {
+              db.collection('user-data').where('user-data', '!=', user.email).get().then(response => {
                 console.log('response',response)
               })
             })
