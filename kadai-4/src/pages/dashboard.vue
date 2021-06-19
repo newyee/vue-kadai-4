@@ -16,11 +16,22 @@
           <tbody>
             <tr v-for="(userData, index) in userList" v-bind:key="index">
               <td>{{ userData.userName }}</td>
-              <td><button @click="onAlert()">walletを見る</button></td>
+              <td>
+                <button @click="openModal(userData.userName, userData.wallet)">
+                  walletを見る
+                </button>
+              </td>
               <td><button>送る</button></td>
             </tr>
           </tbody>
         </table>
+        <div id="overlay" v-show="showContent">
+          <div id="content">
+            <p>{{ displayUserName }}さんの残高</p>
+            <p>{{ displayWalletData }}</p>
+            <p><button @click="closeModal">close</button></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -29,8 +40,6 @@
 /* eslint-disable */
   import firebase from 'firebase'
   import store from '../store/index'
-  import VuejsDialog from 'vuejs-dialog'
-  Vue.use(VuejsDialog);
   export default {
     async created() {
       firebase.auth().onAuthStateChanged((user) => {
@@ -55,9 +64,7 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      // console.log(doc.data())
                       this.userList.push(doc.data())
-                      // console.log('data',this.userList)
                     })
                   })
               })
@@ -71,7 +78,9 @@
     data() {
       return {
         userList: [],
-        //　省略
+        showContent: false,
+        displayUserName:'',
+        displayWalletData:''
       }
     },
     computed: {
@@ -83,25 +92,18 @@
       },
     },
     methods: {
+      openModal: function(userName,wallet){
+        this.showContent = true
+        this.displayUserName = userName
+        this.displayWalletData = wallet
+
+      },
+      closeModal: function(){
+        this.showContent = false
+      },
       async logout() {
         await this.$store.dispatch('logout')
       },
-      onAlert:function(){
-        this.$dialog
-        .confirm({
-          title: '最終確認',
-          body: '本当に削除してもよろしいですか？'
-        },{
-          okText: 'はい',
-          cancelText: 'キャンセル',
-        })
-        .then(function() {
-          console.log('実行しました');
-        })
-        .catch(function() {
-          console.log('実行はキャンセルされました');
-        })
-      }
     },
   }
 </script>
@@ -116,6 +118,30 @@
   table{
     margin-left: 17%;
     width: 60%;
+  }
+  #overlay{
+    /*　要素を重ねた時の順番　*/
+    z-index:1;
+
+    /*　画面全体を覆う設定　*/
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,0.5);
+
+    /*　画面の中央に要素を表示させる設定　*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    #content{
+      z-index:2;
+      width:50%;
+      padding: 1em;
+      background:#fff;
+    }
+
   }
 }
 </style>
