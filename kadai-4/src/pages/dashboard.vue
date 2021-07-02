@@ -41,7 +41,7 @@
   import firebase from 'firebase'
   import store from '../store/index'
   export default {
-    async created() {
+    created() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           user = user ? user : {}
@@ -92,13 +92,12 @@
       },
     },
     methods: {
-      openModal: function(userName,wallet){
+      openModal(userName,wallet){
         this.showContent = true
         this.displayUserName = userName
         this.displayWalletData = wallet
-
       },
-      closeModal: function(){
+      closeModal(){
         this.showContent = false
       },
       async logout() {
@@ -115,11 +114,11 @@
     display: flex;
     justify-content: space-evenly;
   }
-  table{
+  table {
     margin-left: 17%;
     width: 60%;
   }
-  #overlay{
+  #overlay {
     /*　要素を重ねた時の順番　*/
     z-index:1;
 
@@ -135,7 +134,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    #content{
+    #content {
       z-index:2;
       width:50%;
       padding: 1em;
