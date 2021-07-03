@@ -17,11 +17,13 @@
             <tr v-for="(userData, index) in userList" v-bind:key="index">
               <td>{{ userData.userName }}</td>
               <td>
-                <button @click="openModal(userData.userName, userData.wallet)">
+                <button
+                  @click="openUserInfo(userData.userName, userData.wallet)"
+                >
                   walletを見る
                 </button>
               </td>
-              <td><button>送る</button></td>
+              <td><button @click="throwWallet(wallet)">送る</button></td>
             </tr>
           </tbody>
         </table>
@@ -30,6 +32,15 @@
             <p>{{ displayUserName }}さんの残高</p>
             <p>{{ displayWalletData }}</p>
             <p><button @click="closeModal">close</button></p>
+          </div>
+        </div>
+        <div id="overlay" v-show="throwWalletContent">
+          <div id="content">
+            <p>あなたの残高: {{ loginUserWallet }}</p>
+            <p>送る金額</p>
+            <input v-model="throwWalletValue" type="number" />
+            <button @click="sendWallet(throwWalletValue)">送信</button>
+            <p><button @click="closeWalletModal">close</button></p>
           </div>
         </div>
       </div>
@@ -80,7 +91,10 @@
         userList: [],
         showContent: false,
         displayUserName:'',
-        displayWalletData:''
+        displayWalletData:'',
+        throwWalletContent:false,
+        loginUserWallet:'',
+        throwWalletValue:''
       }
     },
     computed: {
@@ -92,13 +106,28 @@
       },
     },
     methods: {
-      openModal(userName,wallet){
+      openUserInfo(userName,wallet){
         this.showContent = true
         this.displayUserName = userName
         this.displayWalletData = wallet
       },
+      throwWallet(loginUserWallet){
+        this.loginUserWallet = loginUserWallet
+        console.log('loginUserWallet',loginUserWallet)
+        this.throwWalletContent = true
+      },
       closeModal(){
         this.showContent = false
+      },
+      closeWalletModal(){
+        this.throwWalletContent = false
+      },
+      sendWallet(wallet){
+        const payload = {
+          wallet,
+        }
+        store.commit('throwWallet',payload)
+        console.log(this.wallet)
       },
       async logout() {
         await this.$store.dispatch('logout')

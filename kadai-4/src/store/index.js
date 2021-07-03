@@ -25,6 +25,9 @@ export default new Vuex.Store({
     deleteUserData(state){
       state.userName = ''
       state.wallet = ''
+    },
+    throwWallet(state,wallet){
+      state.wallet -= wallet
     }
   },
   actions: {
