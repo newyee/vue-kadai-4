@@ -12,6 +12,7 @@ export default new Vuex.Store({
   getters: {
     userName: state => state.userName,
     wallet: state => state.wallet,
+    userUid: state => state.userUid,
     returnSecureToken: state => state.returnSecureToken
   },
   mutations: {
@@ -26,8 +27,16 @@ export default new Vuex.Store({
       state.userName = ''
       state.wallet = ''
     },
-    throwWallet(state,wallet){
-      state.wallet -= wallet
+    throwWallet(state,payload){
+      state.wallet -= payload.wallet
+      const db = firebase.firestore()
+      db.collection('user-data').doc(state.userUid).update({
+        wallet:state.wallet
+      })
+      db.collection('user-data').doc(state.userUid).update({
+        wallet:state.wallet
+      })
+
     }
   },
   actions: {

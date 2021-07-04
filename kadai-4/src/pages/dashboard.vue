@@ -16,6 +16,7 @@
           <tbody>
             <tr v-for="(userData, index) in userList" v-bind:key="index">
               <td>{{ userData.userName }}</td>
+              <td>{{ userData }}</td>
               <td>
                 <button
                   @click="openUserInfo(userData.userName, userData.wallet)"
@@ -55,6 +56,7 @@
     created() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+          this.loginUser = user
           user = user ? user : {}
           const db = firebase.firestore()
           if (user.uid) {
@@ -94,7 +96,8 @@
         displayWalletData:'',
         throwWalletContent:false,
         loginUserWallet:'',
-        throwWalletValue:''
+        throwWalletValue:'',
+        loginUser:''
       }
     },
     computed: {
@@ -127,6 +130,8 @@
           wallet,
         }
         store.commit('throwWallet',payload)
+        // db.collection('user-data').doc('')
+
         console.log(this.wallet)
       },
       async logout() {
