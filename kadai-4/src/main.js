@@ -7,7 +7,6 @@ import firebaseConfig from './config/firebase.config'
 // import into project
 
 // include the default style
-import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
 // Tell Vue to install the plugin.
 Vue.config.productionTip = false

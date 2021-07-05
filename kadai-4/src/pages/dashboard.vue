@@ -77,6 +77,7 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
+                      console.log(doc.data())
                       this.userList.push(doc.data())
                     })
                   })
