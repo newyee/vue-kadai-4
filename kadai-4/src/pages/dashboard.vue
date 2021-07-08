@@ -80,7 +80,9 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      this.userList.push(doc.data())
+                      // this.userList.push(doc.data())
+                      const userData = doc.data()
+                      store.commit('setUserList', userData)
                     })
                   })
               })
@@ -93,7 +95,7 @@
     },
     data() {
       return {
-        userList: [],
+        // userList: [],
         showContent: false,
         displayUserName:'',
         displayWalletData:'',
@@ -112,6 +114,9 @@
       wallet() {
         return this.$store.getters.wallet
       },
+      userList(){
+        return this.$store.getters.userList
+      }
     },
     methods: {
       openUserInfo(userName,wallet){

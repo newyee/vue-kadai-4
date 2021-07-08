@@ -8,12 +8,14 @@ export default new Vuex.Store({
     userName: '',
     wallet: '',
     userUid:'',
+    userList:[]
   },
   getters: {
     userName: state => state.userName,
     wallet: state => state.wallet,
     userUid: state => state.userUid,
-    returnSecureToken: state => state.returnSecureToken
+    returnSecureToken: state => state.returnSecureToken,
+    userList: state => state.userList
   },
   mutations: {
     setUserUid(state, userUid) { // user_uidの取得
@@ -39,6 +41,9 @@ export default new Vuex.Store({
       db.collection('user-data').doc(payload.sendUserUid).update({
         wallet:sendUserWallet
       })
+    },
+    setUserList(state,payload){
+      state.userList = payload.userData
     }
   },
   actions: {
