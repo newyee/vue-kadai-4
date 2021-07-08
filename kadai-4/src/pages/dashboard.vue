@@ -24,9 +24,7 @@
                 </button>
               </td>
               <td>
-                <button
-                  @click="throwWallet(wallet, userData.uid, userData.wallet)"
-                >
+                <button @click="throwWallet(userData.uid, userData.wallet)">
                   送る
                 </button>
               </td>
@@ -121,8 +119,7 @@
         this.displayUserName = userName
         this.displayWalletData = wallet
       },
-      throwWallet(loginUserWallet,sendUid,sendUserWallet){
-        this.loginUserWallet = loginUserWallet
+      throwWallet(sendUid,sendUserWallet){
         this.throwWalletContent = true
         this.sendUserUid = sendUid
         this.sendUserWallet = sendUserWallet
