@@ -28,15 +28,17 @@ export default new Vuex.Store({
       state.wallet = ''
     },
     throwWallet(state,payload){
-      state.wallet -= payload.wallet
+      const wallet= parseInt(payload.wallet)
+      let sendUserWallet = parseInt(payload.sendUserWallet)
+      state.wallet -= wallet
+      sendUserWallet = sendUserWallet + wallet
       const db = firebase.firestore()
       db.collection('user-data').doc(state.userUid).update({
         wallet:state.wallet
       })
-      db.collection('user-data').doc(state.userUid).update({
-        wallet:state.wallet
+      db.collection('user-data').doc(payload.sendUserUid).update({
+        wallet:sendUserWallet
       })
-
     }
   },
   actions: {
@@ -83,7 +85,7 @@ export default new Vuex.Store({
             .doc(response.user.uid)
             .get()
             .then(doc => {
-              console.log(doc)
+              // console.log(doc)
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {

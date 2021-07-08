@@ -16,7 +16,6 @@
           <tbody>
             <tr v-for="(userData, index) in userList" v-bind:key="index">
               <td>{{ userData.userName }}</td>
-              <td>{{ userData }}</td>
               <td>
                 <button
                   @click="openUserInfo(userData.userName, userData.wallet)"
@@ -24,7 +23,13 @@
                   walletを見る
                 </button>
               </td>
-              <td><button @click="throwWallet(wallet)">送る</button></td>
+              <td>
+                <button
+                  @click="throwWallet(wallet, userData.uid, userData.wallet)"
+                >
+                  送る
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -37,7 +42,7 @@
         </div>
         <div id="overlay" v-show="throwWalletContent">
           <div id="content">
-            <p>あなたの残高: {{ loginUserWallet }}</p>
+            <p>あなたの残高: {{ wallet }}</p>
             <p>送る金額</p>
             <input v-model="throwWalletValue" type="number" />
             <button @click="sendWallet(throwWalletValue)">送信</button>
@@ -77,7 +82,6 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      console.log(doc.data())
                       this.userList.push(doc.data())
                     })
                   })
@@ -98,7 +102,9 @@
         throwWalletContent:false,
         loginUserWallet:'',
         throwWalletValue:'',
-        loginUser:''
+        loginUser:'',
+        sendUserUid:'',
+        sendUserWallet:''
       }
     },
     computed: {
@@ -115,10 +121,11 @@
         this.displayUserName = userName
         this.displayWalletData = wallet
       },
-      throwWallet(loginUserWallet){
+      throwWallet(loginUserWallet,sendUid,sendUserWallet){
         this.loginUserWallet = loginUserWallet
-        console.log('loginUserWallet',loginUserWallet)
         this.throwWalletContent = true
+        this.sendUserUid = sendUid
+        this.sendUserWallet = sendUserWallet
       },
       closeModal(){
         this.showContent = false
@@ -128,12 +135,11 @@
       },
       sendWallet(wallet){
         const payload = {
-          wallet,
+          wallet:wallet,
+          sendUserUid:this.sendUserUid,
+          sendUserWallet:this.sendUserWallet
         }
         store.commit('throwWallet',payload)
-        // db.collection('user-data').doc('')
-
-        console.log(this.wallet)
       },
       async logout() {
         await this.$store.dispatch('logout')
