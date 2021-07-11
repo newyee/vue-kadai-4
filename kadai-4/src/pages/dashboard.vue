@@ -80,8 +80,8 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      // this.userList.push(doc.data())
                       const userData = doc.data()
+                      console.log('userData',userData)
                       store.commit('setUserList', userData)
                     })
                   })
