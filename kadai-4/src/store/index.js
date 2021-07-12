@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
+import store from '../store/index'
 Vue.use(Vuex)
 /* eslint-disable */
 export default new Vuex.Store({
@@ -40,6 +41,16 @@ export default new Vuex.Store({
       })
       db.collection('user-data').doc(payload.sendUserUid).update({
         wallet:sendUserWallet
+      })
+      db.collection('user-data')
+      .where('userName', '!=', state.userName)
+      .get()
+      .then((querySnapshot) => {
+        const userData = []
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data())
+        })
+          store.commit('setUserList', userData)
       })
     },
     setUserList(state,payload){
