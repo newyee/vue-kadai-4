@@ -57,6 +57,7 @@
   import store from '../store/index'
   export default {
     created() {
+      console.log("createdが実行！！！")
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           this.loginUser = user
@@ -80,10 +81,10 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      const userData = doc.data()
-                      console.log('userData',userData)
-                      store.commit('setUserList', userData)
+                      this.userData.push(doc.data())
+                      // console.log('userData',userData)
                     })
+                      store.commit('setUserList', this.userData)
                   })
               })
               .catch((error) => {
@@ -104,7 +105,8 @@
         throwWalletValue:'',
         loginUser:'',
         sendUserUid:'',
-        sendUserWallet:''
+        sendUserWallet:'',
+        userData:[]
       }
     },
     computed: {

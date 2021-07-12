@@ -44,7 +44,8 @@ export default new Vuex.Store({
     },
     setUserList(state,payload){
       console.log('payload',payload)
-      state.userList.push(payload.userData)
+      state.userList = payload
+      console.log('userList',state.userList)
     }
   },
   actions: {
