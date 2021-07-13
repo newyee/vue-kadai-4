@@ -57,7 +57,6 @@
   import store from '../store/index'
   export default {
     created() {
-      console.log("createdが実行！！！")
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           this.loginUser = user
@@ -82,7 +81,6 @@
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                       this.userData.push(doc.data())
-                      // console.log('userData',userData)
                     })
                       store.commit('setUserList', this.userData)
                   })
@@ -96,7 +94,6 @@
     },
     data() {
       return {
-        // userList: [],
         showContent: false,
         displayUserName:'',
         displayWalletData:'',

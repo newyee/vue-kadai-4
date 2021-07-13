@@ -54,9 +54,7 @@ export default new Vuex.Store({
       })
     },
     setUserList(state,payload){
-      console.log('payload',payload)
       state.userList = payload
-      console.log('userList',state.userList)
     }
   },
   actions: {
@@ -103,7 +101,6 @@ export default new Vuex.Store({
             .doc(response.user.uid)
             .get()
             .then(doc => {
-              // console.log(doc)
               const userName = doc.data().userName
               const wallet = doc.data().wallet
               const payload = {
