@@ -30,17 +30,38 @@ export default new Vuex.Store({
       state.userName = ''
       state.wallet = ''
     },
+    setUserList(state,payload){
+      state.userList = payload
+    }
+  },
+  actions: {
     throwWallet(state,payload){
+      const db = firebase.firestore()
+      const dbUserData = db.collection('user-data').doc(store.getters.userUid)
+      console.log('state.userUid',store.getters.userUid)
+      const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
+      console.log('payload.sendUserUid',payload.sendUserUid)
       const wallet= parseInt(payload.wallet)
       let sendUserWallet = parseInt(payload.sendUserWallet)
       state.wallet -= wallet
       sendUserWallet = sendUserWallet + wallet
-      const db = firebase.firestore()
-      db.collection('user-data').doc(state.userUid).update({
-        wallet:state.wallet
-      })
-      db.collection('user-data').doc(payload.sendUserUid).update({
-        wallet:sendUserWallet
+      db.runTransaction(async (transaction) => {
+        // const userGetData = await transaction.get(userData)
+        // const sendUserGetData = await transaction.get(payload.sendUserUid)
+        // const userData = latestgetData.data()
+        // const sendUserData = sendUserGetData.data()
+        transaction.update(
+          dbUserData,
+          {wallet: state.wallet},
+        )
+        transaction.update(
+          sendDbUserData,
+          {wallet: sendUserWallet},
+        )
+      }).then(() => {
+        console.log('successfully committed!')
+      }).catch((error) => {
+        console.log('Transaction failed: ', error)
       })
       db.collection('user-data')
       .where('userName', '!=', state.userName)
@@ -50,14 +71,9 @@ export default new Vuex.Store({
         querySnapshot.forEach((doc) => {
           userData.push(doc.data())
         })
-          store.commit('setUserList', userData)
+        store.commit('setUserList', userData)
       })
     },
-    setUserList(state,payload){
-      state.userList = payload
-    }
-  },
-  actions: {
     async registerUserData(context, userData) {
       await firebase
         .auth()

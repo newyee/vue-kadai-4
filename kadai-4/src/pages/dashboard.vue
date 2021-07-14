@@ -95,15 +95,15 @@
     data() {
       return {
         showContent: false,
-        displayUserName:'',
-        displayWalletData:'',
+        displayUserName: '',
+        displayWalletData: '',
         throwWalletContent:false,
-        loginUserWallet:'',
-        throwWalletValue:'',
-        loginUser:'',
-        sendUserUid:'',
-        sendUserWallet:'',
-        userData:[]
+        loginUserWallet: '',
+        throwWalletValue: '',
+        loginUser: '',
+        sendUserUid: '',
+        sendUserWallet: '',
+        userData: []
       }
     },
     computed: {
@@ -136,11 +136,12 @@
       },
       sendWallet(wallet){
         const payload = {
-          wallet:wallet,
+          wallet,
           sendUserUid:this.sendUserUid,
           sendUserWallet:this.sendUserWallet
         }
-        store.commit('throwWallet',payload)
+        // store.commit('throwWallet',payload)
+        this.$store.dispatch('throwWallet', payload)
       },
       async logout() {
         await this.$store.dispatch('logout')
