@@ -8,8 +8,8 @@ export default new Vuex.Store({
   state: {
     userName: '',
     wallet: '',
-    userUid:'',
-    userList:[]
+    userUid: '',
+    userList: []
   },
   getters: {
     userName: state => state.userName,
@@ -32,27 +32,35 @@ export default new Vuex.Store({
     },
     setUserList(state,payload){
       state.userList = payload
+    },
+    changeLoginUserWallet(state,wallet){
+      console.log('wallet',wallet)
+      state.wallet -= wallet
     }
   },
   actions: {
     throwWallet(state,payload){
+      console.log('store.getters.wallet',store.getters.wallet)
       const db = firebase.firestore()
       const dbUserData = db.collection('user-data').doc(store.getters.userUid)
-      console.log('state.userUid',store.getters.userUid)
+      // console.log('state.userUid',store.getters.userUid)
       const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
-      console.log('payload.sendUserUid',payload.sendUserUid)
+      // console.log('payload.sendUserUid',payload.sendUserUid)
       const wallet= parseInt(payload.wallet)
       let sendUserWallet = parseInt(payload.sendUserWallet)
-      state.wallet -= wallet
+      // store.getters.wallet -= wallet
+      store.commit('changeLoginUserWallet',wallet)
       sendUserWallet = sendUserWallet + wallet
       db.runTransaction(async (transaction) => {
         // const userGetData = await transaction.get(userData)
         // const sendUserGetData = await transaction.get(payload.sendUserUid)
         // const userData = latestgetData.data()
         // const sendUserData = sendUserGetData.data()
+        // console.log('store.getters.wallet',store.getters.wallet)
+        console.log('sendUserWallet',sendUserWallet)
         transaction.update(
           dbUserData,
-          {wallet: state.wallet},
+          {wallet: store.getters.wallet},
         )
         transaction.update(
           sendDbUserData,
