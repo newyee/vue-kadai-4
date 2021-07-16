@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import firebase from 'firebase'
-import store from '../store/index'
 Vue.use(Vuex)
 /* eslint-disable */
 export default new Vuex.Store({
@@ -39,47 +38,47 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    throwWallet(state,payload){
-      console.log('store.getters.wallet',store.getters.wallet)
+    throwWallet(context,payload){
+      console.log('context.getters.wallet',context.getters.wallet)
       const db = firebase.firestore()
-      const dbUserData = db.collection('user-data').doc(store.getters.userUid)
-      // console.log('state.userUid',store.getters.userUid)
+      const dbUserData = db.collection('user-data').doc(context.getters.userUid)
       const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
       // console.log('payload.sendUserUid',payload.sendUserUid)
       const wallet= parseInt(payload.wallet)
       let sendUserWallet = parseInt(payload.sendUserWallet)
-      // store.getters.wallet -= wallet
-      store.commit('changeLoginUserWallet',wallet)
+      context.commit('changeLoginUserWallet',wallet)
       sendUserWallet = sendUserWallet + wallet
       db.runTransaction(async (transaction) => {
         // const userGetData = await transaction.get(userData)
         // const sendUserGetData = await transaction.get(payload.sendUserUid)
         // const userData = latestgetData.data()
         // const sendUserData = sendUserGetData.data()
-        // console.log('store.getters.wallet',store.getters.wallet)
         console.log('sendUserWallet',sendUserWallet)
         transaction.update(
           dbUserData,
-          {wallet: store.getters.wallet},
+          {wallet: context.getters.wallet},
         )
         transaction.update(
           sendDbUserData,
           {wallet: sendUserWallet},
         )
+        console.log('update')
       }).then(() => {
         console.log('successfully committed!')
       }).catch((error) => {
         console.log('Transaction failed: ', error)
       })
       db.collection('user-data')
-      .where('userName', '!=', state.userName)
+      .where('userName', '!=', context.getters.userName)
       .get()
       .then((querySnapshot) => {
         const userData = []
         querySnapshot.forEach((doc) => {
+          console.log('test')
           userData.push(doc.data())
         })
-        store.commit('setUserList', userData)
+        console.log('userData',userData)
+        context.commit('setUserList', userData)
       })
     },
     async registerUserData(context, userData) {
