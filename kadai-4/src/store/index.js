@@ -38,7 +38,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    throwWallet(context,payload){
+    async throwWallet(context,payload){
       console.log('context.getters.wallet',context.getters.wallet)
       const db = firebase.firestore()
       const dbUserData = db.collection('user-data').doc(context.getters.userUid)
@@ -68,7 +68,8 @@ export default new Vuex.Store({
       }).catch((error) => {
         console.log('Transaction failed: ', error)
       })
-      db.collection('user-data')
+
+      await db.collection('user-data')
       .where('userName', '!=', context.getters.userName)
       .get()
       .then((querySnapshot) => {
