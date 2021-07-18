@@ -33,11 +33,13 @@ export default new Vuex.Store({
       state.userList = payload
     },
     changeLoginUserWallet(state,wallet){
+      console.log('wallet',wallet)
       state.wallet -= wallet
     }
   },
   actions: {
     async throwWallet(context,payload){
+      console.log('context.getters.wallet',context.getters.wallet)
       const db = firebase.firestore()
       const dbUserData = db.collection('user-data').doc(context.getters.userUid)
       const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
@@ -45,7 +47,7 @@ export default new Vuex.Store({
       let sendUserWallet = parseInt(payload.sendUserWallet)
       context.commit('changeLoginUserWallet',wallet)
       sendUserWallet = sendUserWallet + wallet
-      await db.runTransaction((transaction) => {
+      await db.runTransaction(async (transaction) => {
         transaction.update(
           dbUserData,
           {wallet: context.getters.wallet},
