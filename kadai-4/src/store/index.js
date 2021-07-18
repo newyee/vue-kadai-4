@@ -33,27 +33,19 @@ export default new Vuex.Store({
       state.userList = payload
     },
     changeLoginUserWallet(state,wallet){
-      console.log('wallet',wallet)
       state.wallet -= wallet
     }
   },
   actions: {
     async throwWallet(context,payload){
-      console.log('context.getters.wallet',context.getters.wallet)
       const db = firebase.firestore()
       const dbUserData = db.collection('user-data').doc(context.getters.userUid)
       const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
-      // console.log('payload.sendUserUid',payload.sendUserUid)
       const wallet= parseInt(payload.wallet)
       let sendUserWallet = parseInt(payload.sendUserWallet)
       context.commit('changeLoginUserWallet',wallet)
       sendUserWallet = sendUserWallet + wallet
-      db.runTransaction(async (transaction) => {
-        // const userGetData = await transaction.get(userData)
-        // const sendUserGetData = await transaction.get(payload.sendUserUid)
-        // const userData = latestgetData.data()
-        // const sendUserData = sendUserGetData.data()
-        console.log('sendUserWallet',sendUserWallet)
+      await db.runTransaction((transaction) => {
         transaction.update(
           dbUserData,
           {wallet: context.getters.wallet},
@@ -62,7 +54,6 @@ export default new Vuex.Store({
           sendDbUserData,
           {wallet: sendUserWallet},
         )
-        console.log('update')
       }).then(() => {
         console.log('successfully committed!')
       }).catch((error) => {
@@ -75,10 +66,8 @@ export default new Vuex.Store({
       .then((querySnapshot) => {
         const userData = []
         querySnapshot.forEach((doc) => {
-          console.log('test')
           userData.push(doc.data())
         })
-        console.log('userData',userData)
         context.commit('setUserList', userData)
       })
     },
@@ -99,7 +88,7 @@ export default new Vuex.Store({
               wallet,
               uid,
             })
-            .then(docRef => {
+            .then(_ => {
               const payload = {
                 userName: userData.userName,
                 wallet

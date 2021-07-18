@@ -97,7 +97,7 @@
         showContent: false,
         displayUserName: '',
         displayWalletData: '',
-        throwWalletContent:false,
+        throwWalletContent: false,
         loginUserWallet: '',
         throwWalletValue: '',
         loginUser: '',
