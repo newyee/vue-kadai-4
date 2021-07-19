@@ -7,12 +7,15 @@ export default new Vuex.Store({
   state: {
     userName: '',
     wallet: '',
-    userUid:'',
+    userUid: '',
+    userList: []
   },
   getters: {
     userName: state => state.userName,
     wallet: state => state.wallet,
-    returnSecureToken: state => state.returnSecureToken
+    userUid: state => state.userUid,
+    returnSecureToken: state => state.returnSecureToken,
+    userList: state => state.userList
   },
   mutations: {
     setUserUid(state, userUid) { // user_uidの取得
@@ -25,9 +28,48 @@ export default new Vuex.Store({
     deleteUserData(state){
       state.userName = ''
       state.wallet = ''
+    },
+    setUserList(state,payload){
+      state.userList = payload
+    },
+    changeLoginUserWallet(state,wallet){
+      state.wallet -= wallet
     }
   },
   actions: {
+    async throwWallet(context,payload){
+      const db = firebase.firestore()
+      const dbUserData = db.collection('user-data').doc(context.getters.userUid)
+      const sendDbUserData = db.collection('user-data').doc(payload.sendUserUid)
+      const wallet= parseInt(payload.wallet)
+      let sendUserWallet = parseInt(payload.sendUserWallet)
+      sendUserWallet = sendUserWallet + wallet
+      await db.runTransaction(async (transaction) => {
+        transaction.update(
+          dbUserData,
+          {wallet: context.getters.wallet},
+        )
+        transaction.update(
+          sendDbUserData,
+          {wallet: sendUserWallet},
+        )
+      }).then(() => {
+        console.log('successfully committed!')
+      }).catch((error) => {
+        console.log('Transaction failed: ', error)
+      })
+
+      await db.collection('user-data')
+      .where('userName', '!=', context.getters.userName)
+      .get()
+      .then((querySnapshot) => {
+        const userData = []
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data())
+        })
+        context.commit('setUserList', userData)
+      })
+    },
     async registerUserData(context, userData) {
       await firebase
         .auth()
@@ -42,9 +84,10 @@ export default new Vuex.Store({
             .doc(uid)
             .set({
               userName,
-              wallet
+              wallet,
+              uid,
             })
-            .then(docRef => {
+            .then(_ => {
               const payload = {
                 userName: userData.userName,
                 wallet
@@ -77,7 +120,6 @@ export default new Vuex.Store({
                 wallet,
               }
               context.commit('saveUserData', payload)
-
             })
             .catch(error => {
               console.log('エラー',error)

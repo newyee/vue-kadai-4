@@ -17,11 +17,17 @@
             <tr v-for="(userData, index) in userList" v-bind:key="index">
               <td>{{ userData.userName }}</td>
               <td>
-                <button @click="openModal(userData.userName, userData.wallet)">
+                <button
+                  @click="openUserInfo(userData.userName, userData.wallet)"
+                >
                   walletを見る
                 </button>
               </td>
-              <td><button>送る</button></td>
+              <td>
+                <button @click="throwWallet(userData.uid, userData.wallet)">
+                  送る
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -30,6 +36,15 @@
             <p>{{ displayUserName }}さんの残高</p>
             <p>{{ displayWalletData }}</p>
             <p><button @click="closeModal">close</button></p>
+          </div>
+        </div>
+        <div id="overlay" v-show="throwWalletContent">
+          <div id="content">
+            <p>あなたの残高: {{ wallet }}</p>
+            <p>送る金額</p>
+            <input v-model="throwWalletValue" type="number" />
+            <button @click="sendWallet(throwWalletValue)">送信</button>
+            <p><button @click="closeWalletModal">close</button></p>
           </div>
         </div>
       </div>
@@ -44,6 +59,7 @@
     created() {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+          this.loginUser = user
           user = user ? user : {}
           const db = firebase.firestore()
           if (user.uid) {
@@ -64,8 +80,9 @@
                   .get()
                   .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                      this.userList.push(doc.data())
+                      this.userData.push(doc.data())
                     })
+                      store.commit('setUserList', this.userData)
                   })
               })
               .catch((error) => {
@@ -77,10 +94,16 @@
     },
     data() {
       return {
-        userList: [],
         showContent: false,
-        displayUserName:'',
-        displayWalletData:''
+        displayUserName: '',
+        displayWalletData: '',
+        throwWalletContent: false,
+        loginUserWallet: '',
+        throwWalletValue: '',
+        loginUser: '',
+        sendUserUid: '',
+        sendUserWallet: '',
+        userData: []
       }
     },
     computed: {
@@ -90,15 +113,35 @@
       wallet() {
         return this.$store.getters.wallet
       },
+      userList(){
+        return this.$store.getters.userList
+      }
     },
     methods: {
-      openModal(userName,wallet){
+      openUserInfo(userName,wallet){
         this.showContent = true
         this.displayUserName = userName
         this.displayWalletData = wallet
       },
+      throwWallet(sendUid,sendUserWallet){
+        this.throwWalletContent = true
+        this.sendUserUid = sendUid
+        this.sendUserWallet = sendUserWallet
+      },
       closeModal(){
         this.showContent = false
+      },
+      closeWalletModal(){
+        this.throwWalletContent = false
+      },
+      sendWallet(wallet){
+        const payload = {
+          wallet,
+          sendUserUid:this.sendUserUid,
+          sendUserWallet:this.sendUserWallet
+        }
+        // store.commit('throwWallet',payload)
+        this.$store.dispatch('throwWallet', payload)
       },
       async logout() {
         await this.$store.dispatch('logout')
